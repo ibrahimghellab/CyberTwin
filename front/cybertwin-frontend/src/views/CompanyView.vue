@@ -106,22 +106,43 @@ onMounted(fetchCompanies)
 .btn-primary:hover { background: #1a252f; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
 /* Style du formulaire */
-.glass-panel { background: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; }
-label { font-weight: bold; font-size: 0.9rem; color: #555; }
-input { margin-top: 0.3rem; border: 1px solid #ccc; border-radius: 4px; }
+.glass-panel { background: var(--surface); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 15px var(--shadow-color-soft); border: 1px solid var(--border-color); }
+label { font-weight: bold; font-size: 0.9rem; color: var(--text-muted); }
+input { margin-top: 0.3rem; border: 1px solid var(--border-color); border-radius: 4px; }
 
 .company-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
 .company-card { 
-  background: white; border-radius: 12px; padding: 1.5rem; cursor: pointer;
-  border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  background: var(--card-bg); border-radius: 12px; padding: 1.5rem; cursor: pointer;
+  border: 2px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.08);
   transition: all 0.3s ease; position: relative; overflow: hidden;
+  color: var(--text-color);
 }
-.company-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.08); }
-.company-card.active { border-color: #42b983; background: #fafffc; }
+.company-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.18); }
+.company-card.active { 
+  border-color: var(--primary-color); 
+  background: rgba(74, 163, 240, 0.16);
+}
+
+.card-stats {
+  color: var(--text-color); /* Le texte des employés devient visible */
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
 
 .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-.company-card h3 { margin: 0 0 0.5rem 0; color: #2c3e50; }
-.sector { display: inline-block; padding: 0.3rem 0.8rem; background: #eef2f5; border-radius: 20px; font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+.company-card h3 { 
+  margin: 0 0 0.5rem 0; 
+  color: var(--text-color);
+}
+.sector { 
+  display: inline-block; 
+  padding: 0.3rem 0.8rem; 
+  background: var(--border-color);
+  border-radius: 20px; 
+  font-size: 0.85rem; 
+  color: var(--text-color);
+  margin-bottom: 1rem; 
+}
 .active-badge { position: absolute; top: 1rem; right: -2rem; background: #42b983; color: white; font-size: 0.7rem; font-weight: bold; padding: 0.3rem 2.5rem; transform: rotate(45deg); }
 
 .slide-down-enter-active, .slide-down-leave-active { transition: all 0.4s ease; overflow: hidden; }

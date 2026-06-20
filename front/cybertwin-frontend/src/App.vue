@@ -1,8 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { useAppStore } from './stores/appStore'
+import { useThemeStore } from './stores/themeStore'
 
 const appStore = useAppStore()
+const themeStore = useThemeStore()
 </script>
 
 <template>
@@ -19,8 +21,12 @@ const appStore = useAppStore()
           <RouterLink to="/dashboard">Tableau de bord</RouterLink>
           <RouterLink to="/rapport">Rapport</RouterLink>
         </template>
-        <div v-else class="nav-warning">Sélectionnez une entreprise pour débloquer les outils.</div>
+        <div v-else class="nav-warning">Sélectionnez une entreprise.</div>
       </nav>
+
+      <div class="theme-toggle" @click="themeStore.toggleTheme">
+        {{ themeStore.isDark ? '☀️ Mode Clair' : '🌙 Mode Sombre' }}
+      </div>
     </aside>
 
     <main class="main-content">
@@ -34,37 +40,103 @@ const appStore = useAppStore()
 </template>
 
 <style>
-/* CSS épuré */
-body { margin: 0; font-family: 'Inter', sans-serif; background-color: #f4f7f6; color: #333; }
-.app-wrapper { display: flex; min-height: 100vh; }
-.sidebar { width: 250px; background: #ffffff; padding: 2rem 1rem; box-shadow: 2px 0 10px rgba(0,0,0,0.03); z-index: 10; }
-.logo { font-size: 1.5rem; font-weight: bold; color: #2c3e50; margin-bottom: 2rem; text-align: center; }
-nav { display: flex; flex-direction: column; gap: 0.5rem; }
-nav a { padding: 0.8rem 1rem; text-decoration: none; color: #555; border-radius: 8px; transition: all 0.3s ease; }
-nav a:hover { background: #f0f4f8; transform: translateX(5px); }
-nav a.router-link-exact-active { background: #2c3e50; color: white; box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2); }
-.nav-warning { font-size: 0.8rem; color: #d32f2f; padding: 1rem; text-align: center; font-style: italic; }
-.main-content { flex: 1; padding: 2rem 3rem; overflow-y: auto; }
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease, transform 0.3s ease; }
-.fade-enter-from { opacity: 0; transform: translateY(10px); }
-.fade-leave-to { opacity: 0; transform: translateY(-10px); }
-
-@media print {
-  /* On cache la barre latérale */
-  .sidebar { 
-    display: none !important; 
-  }
-  
-  /* On enlève les marges du contenu principal pour utiliser toute la page A4 */
-  .main-content { 
-    padding: 0 !important; 
-    overflow: visible !important; 
-  }
-  
-  /* On désactive le flexbox global pour éviter les bugs de saut de page */
-  .app-wrapper { 
-    display: block !important; 
-  }
+/* 1. PALETTE COMPLÉMENTAIRE (Variables CSS) */
+:root {
+  --bg-color: #f4f7f6;
+  --sidebar-bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #f7fafc;
+  --card-bg: #ffffff;
+  --text-color: #1a252f;
+  --text-muted: #6b7280;
+  --text-secondary: #475569;
+  --primary-color: #2980b9;    /* Bleu Technique */
+  --primary-hover: #1f618d;
+  --accent-color: #e67e22;    /* Orange Alerte */
+  --accent-hover: #d35400;
+  --danger-color: #d32f2f;
+  --warning-color: #ff9800;
+  --success-color: #4caf50;
+  --border-color: #dcdde1;
+  --shadow-color: rgba(0,0,0,0.08);
+  --shadow-color-soft: rgba(0,0,0,0.04);
 }
 
+html.dark-theme {
+  --bg-color: #101214;
+  --sidebar-bg: #16181c;
+  --surface: #1f252c;
+  --surface-alt: #222b35;
+  --card-bg: #1f252c;
+  --text-color: #f3f6fb;
+  --text-muted: #a0aec0;
+  --text-secondary: #cbd5e1;
+  --primary-color: #4aa3f0;
+  --primary-hover: #3588d4;
+  --accent-color: #f39c12;
+  --accent-hover: #d68910;
+  --danger-color: #f87171;
+  --warning-color: #fbbf24;
+  --success-color: #34d399;
+  --border-color: #2f3842;
+  --shadow-color: rgba(0,0,0,0.24);
+  --shadow-color-soft: rgba(0,0,0,0.12);
+}
+
+/* 2. LAYOUT FIXE */
+body { margin: 0; font-family: 'Inter', sans-serif; }
+
+.app-wrapper { 
+  display: flex; 
+  height: 100vh; 
+  overflow: hidden; 
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.sidebar { 
+  width: 250px; 
+  background: var(--sidebar-bg); 
+  padding: 2rem 1rem; 
+  box-shadow: 2px 0 10px rgba(0,0,0,0.05); 
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: background-color 0.3s;
+}
+
+.main-content { 
+  flex: 1; 
+  padding: 2rem 3rem; 
+  overflow-y: auto; 
+  height: 100%; 
+  box-sizing: border-box;
+}
+
+/* 3. ELEMENTS UI */
+.logo { font-size: 1.5rem; font-weight: bold; color: var(--text-color); margin-bottom: 2rem; text-align: center; }
+nav { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; }
+nav a { padding: 0.8rem 1rem; text-decoration: none; color: var(--text-color); border-radius: 8px; transition: all 0.3s ease; }
+nav a:hover { background: var(--border-color); }
+nav a.router-link-exact-active { background: var(--primary-color); color: white; }
+
+.theme-toggle {
+  margin-top: auto;
+  padding: 0.8rem;
+  background: var(--border-color);
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav-warning { font-size: 0.8rem; color: var(--accent-color); padding: 1rem; text-align: center; font-style: italic; }
+
+/* 4. IMPRESSION */
+@media print {
+  .sidebar, .theme-toggle, .no-print { display: none !important; }
+  .main-content { padding: 0 !important; overflow: visible !important; }
+  .app-wrapper { display: block !important; }
+}
 </style>

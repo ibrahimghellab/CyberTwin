@@ -147,20 +147,20 @@ const vulnChartData = computed(() => {
 /* Grille des indicateurs (KPIs) */
 .kpi-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
 .kpi-card { 
-  background: white; border-radius: 12px; padding: 1.5rem; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee;
+  background: var(--surface); border-radius: 12px; padding: 1.5rem; 
+  box-shadow: 0 4px 15px var(--shadow-color-soft); border: 1px solid var(--border-color);
   display: flex; align-items: center; gap: 1.5rem;
 }
 .kpi-card.highlight { flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 0.5rem; }
 
-.kpi-icon { font-size: 2.5rem; background: #f8f9fa; padding: 1rem; border-radius: 12px; }
-.kpi-info h3 { margin: 0; font-size: 0.9rem; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
-.kpi-value { font-size: 2rem; font-weight: bold; color: #2c3e50; margin-top: 0.5rem; }
+.kpi-icon { font-size: 2.5rem; background: var(--surface-alt); padding: 1rem; border-radius: 12px; }
+.kpi-info h3 { margin: 0; font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.kpi-value { font-size: 2rem; font-weight: bold; color: var(--text-color); margin-top: 0.5rem; }
 
 /* Styles du Score de Risque */
-.highlight h3 { margin: 0; font-size: 1rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+.highlight h3 { margin: 0; font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 .score-value { font-size: 3.5rem; font-weight: 900; line-height: 1; }
-.max-score { font-size: 1.5rem; color: #ccc; font-weight: normal; }
+.max-score { font-size: 1.5rem; color: #9ca3af; font-weight: normal; }
 
 /* Couleurs dynamiques du risque */
 .score-value.faible { color: #4caf50; }
@@ -168,22 +168,22 @@ const vulnChartData = computed(() => {
 .score-value.élevé { color: #d32f2f; }
 
 .risk-badge { padding: 0.4rem 1.2rem; border-radius: 20px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 0.5rem; }
-.risk-badge.faible { background: #e8f5e9; color: #2e7d32; }
-.risk-badge.moyen { background: #fff3e0; color: #e65100; }
-.risk-badge.élevé { background: #ffebee; color: #c62828; }
+.risk-badge.faible { background: rgba(52, 211, 153, 0.16); color: var(--success-color); }
+.risk-badge.moyenne { background: rgba(251, 191, 36, 0.16); color: var(--warning-color); }
+.risk-badge.élevé { background: rgba(248, 113, 113, 0.16); color: var(--danger-color); }
 
 /* Grille des graphiques */
 .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.chart-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; }
-.chart-card h3 { margin: 0 0 1.5rem 0; color: #2c3e50; font-size: 1.1rem; text-align: center; }
+.chart-card { background: var(--surface); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 15px var(--shadow-color-soft); border: 1px solid var(--border-color); }
+.chart-card h3 { margin: 0 0 1.5rem 0; color: var(--text-color); font-size: 1.1rem; text-align: center; }
 
 /* Wrapper crucial pour que Chart.js reste responsive */
 .chart-wrapper { height: 300px; position: relative; display: flex; justify-content: center; align-items: center; }
-.no-data { color: #999; font-style: italic; }
+.no-data { color: var(--text-muted); font-style: italic; }
 
 /* États vides et chargement */
-.empty-state { text-align: center; padding: 3rem; color: #888; background: #fff3cd; border-radius: 12px; border: 1px solid #ffeeba; margin-top: 2rem; }
-.loading-state { text-align: center; padding: 4rem; color: #666; }
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); background: var(--surface-alt); border-radius: 12px; border: 1px solid var(--border-color); margin-top: 2rem; }
+.loading-state { text-align: center; padding: 4rem; color: var(--text-muted); }
 .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 1rem auto; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>

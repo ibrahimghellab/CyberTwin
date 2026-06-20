@@ -135,61 +135,61 @@ watch(() => appStore.currentCompanyId, () => {
 .btn-print:hover { background: #1a252f; transform: translateY(-2px); }
 
 /* Feuille de style "Papier A4" */
-.report-paper { background: white; padding: 3.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border-radius: 8px; border: 1px solid #e2e8f0; font-family: 'Inter', sans-serif; color: #1a202c; }
-.report-header { display: flex; justify-content: space-between; border-bottom: 3px solid #2c3e50; padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
-.header-main h1 { font-size: 1.6rem; color: #2c3e50; margin: 0 0 0.5rem 0; font-weight: 800; }
-.header-main h2 { font-size: 1.2rem; color: #4a5568; margin: 0; font-weight: 600; }
-.sector-tag { font-size: 0.85rem; color: #718096; margin-top: 0.3rem; }
-.header-meta { text-align: right; font-size: 0.85rem; color: #4a5568; line-height: 1.6; }
+.report-paper { background: var(--surface); padding: 3.5rem; box-shadow: 0 4px 20px var(--shadow-color-soft); border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Inter', sans-serif; color: var(--text-color); }
+.report-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary-color); padding-bottom: 1.5rem; margin-bottom: 2.5rem; }
+.header-main h1 { font-size: 1.6rem; color: var(--text-color); margin: 0 0 0.5rem 0; font-weight: 800; }
+.header-main h2 { font-size: 1.2rem; color: var(--text-muted); margin: 0; font-weight: 600; }
+.sector-tag { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem; }
+.header-meta { text-align: right; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
 
 .report-section { margin-bottom: 3rem; }
-.report-section h3 { font-size: 1.2rem; color: #2c3e50; border-left: 4px solid #2c3e50; padding-left: 0.6rem; margin: 0 0 0.4rem 0; font-weight: 700; }
-.section-desc { font-size: 0.85rem; color: #718096; margin: 0 0 1.5rem 0; font-style: italic; }
+.report-section h3 { font-size: 1.2rem; color: var(--text-color); border-left: 4px solid var(--primary-color); padding-left: 0.6rem; margin: 0 0 0.4rem 0; font-weight: 700; }
+.section-desc { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 1.5rem 0; font-style: italic; }
 
 /* Bloc Risk de Synthèse */
-.risk-summary-box { padding: 1.5rem; border-radius: 8px; text-align: center; max-width: 350px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-.risk-summary-box.faible { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
-.risk-summary-box.moyen { background: #fff7ed; border: 1px solid #ffedd5; color: #9a3412; }
-.risk-summary-box.élevé { background: #fef2f2; border: 1px solid #fee2e2; color: #991b1b; }
+.risk-summary-box { padding: 1.5rem; border-radius: 8px; text-align: center; max-width: 350px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0,0,0,0.06); background: var(--surface-alt); border: 1px solid var(--border-color); }
+.risk-summary-box.faible { color: var(--success-color); }
+.risk-summary-box.moyen { color: var(--warning-color); }
+.risk-summary-box.élevé { color: var(--danger-color); }
 
 .risk-score-big { font-size: 3.5rem; font-weight: 900; line-height: 1; }
-.risk-score-big span { font-size: 1.2rem; font-weight: normal; opacity: 0.6; }
-.risk-text-status { margin-top: 0.5rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.risk-score-big span { font-size: 1.2rem; font-weight: normal; opacity: 0.7; }
+.risk-text-status { margin-top: 0.5rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
 
 /* Liste des équipements */
 .assets-report-list { display: flex; flex-direction: column; gap: 1.5rem; }
-.asset-report-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.2rem; }
+.asset-report-item { background: var(--surface-alt); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.2rem; }
 .asset-report-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
-.asset-report-meta h4 { margin: 0; font-size: 1.05rem; color: #334155; }
-.report-badge-type { background: #e2e8f0; font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; color: #475569; font-weight: 600; }
-.internet-facing-alert { font-size: 0.75rem; color: #ef4444; background: #fee2e2; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; }
+.asset-report-meta h4 { margin: 0; font-size: 1.05rem; color: var(--text-color); }
+.report-badge-type { background: var(--surface); font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 4px; color: var(--text-muted); font-weight: 600; }
+.internet-facing-alert { font-size: 0.75rem; color: var(--danger-color); background: rgba(248,113,113,0.14); padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: bold; }
 
-.vulns-report-sublist { border-top: 1px dashed #cbd5e1; margin-top: 0.8rem; padding-top: 0.8rem; }
-.vulns-report-sublist h5 { margin: 0 0 0.6rem 0; font-size: 0.85rem; color: #64748b; text-transform: uppercase; }
+.vulns-report-sublist { border-top: 1px dashed var(--border-color); margin-top: 0.8rem; padding-top: 0.8rem; }
+.vulns-report-sublist h5 { margin: 0 0 0.6rem 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; }
 .vulns-report-sublist ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
 .vulns-report-sublist li { font-size: 0.9rem; padding-left: 0.5rem; }
 
 .mini-crit-badge { display: inline-block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 0.1rem 0.4rem; border-radius: 3px; color: white; margin-right: 0.5rem; vertical-align: middle; }
-.mini-crit-badge.faible { background: #4caf50; }
-.mini-crit-badge.moyenne { background: #ff9800; }
+.mini-crit-badge.faible { background: var(--success-color); }
+.mini-crit-badge.moyenne { background: var(--warning-color); }
 .mini-crit-badge.élevée { background: #f44336; }
 .mini-crit-badge.critique { background: #b71c1c; }
 
-.vuln-report-desc { margin: 0.2rem 0 0 1.8rem; font-size: 0.8rem; color: #64748b; line-height: 1.4; }
-.asset-clean-success { font-size: 0.85rem; color: #166534; padding-top: 0.3rem; }
+.vuln-report-desc { margin: 0.2rem 0 0 1.8rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+.asset-clean-success { font-size: 0.85rem; color: var(--success-color); padding-top: 0.3rem; }
 
 /* Recommandations */
-.recommendations-box { background: #f8fafc; padding: 2rem; border-radius: 8px; border: 1px solid #e2e8f0; }
+.recommendations-box { background: var(--surface-alt); padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); }
 .rec-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem; }
 .rec-list li { display: flex; gap: 1rem; align-items: flex-start; }
-.rec-number { background: #2c3e50; color: white; border-radius: 50%; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
-.rec-list p { margin: 0; font-size: 0.9rem; line-height: 1.5; color: #334155; padding-top: 2px; }
+.rec-number { background: var(--primary-color); color: white; border-radius: 50%; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
+.rec-list p { margin: 0; font-size: 0.9rem; line-height: 1.5; color: var(--text-color); padding-top: 2px; }
 
-.report-footer { border-top: 1px solid #e2e8f0; margin-top: 4rem; padding-top: 1rem; text-align: center; font-size: 0.75rem; color: #94a3b8; }
+.report-footer { border-top: 1px solid var(--border-color); margin-top: 4rem; padding-top: 1rem; text-align: center; font-size: 0.75rem; color: var(--text-muted); }
 
 /* Gestion propre des états vides/chargements */
-.empty-state { text-align: center; padding: 3rem; color: #888; background: #fff3cd; border-radius: 12px; border: 1px solid #ffeeba; }
-.loading-state { text-align: center; padding: 4rem; color: #666; }
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); background: var(--surface-alt); border-radius: 12px; border: 1px solid var(--border-color); }
+.loading-state { text-align: center; padding: 4rem; color: var(--text-muted); }
 .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #2c3e50; border-radius: 50%; width: 35px; height: 35px; animation: spin 1s linear infinite; margin: 0 auto 1rem auto; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
