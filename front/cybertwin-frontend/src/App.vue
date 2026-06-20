@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { useAppStore } from './stores/appStore'
 import { useThemeStore } from './stores/themeStore'
+import ToastContainer from './components/ToastContainer.vue'
 
 const appStore = useAppStore()
 const themeStore = useThemeStore()
@@ -36,6 +37,8 @@ const themeStore = useThemeStore()
         </transition>
       </router-view>
     </main>
+
+    <ToastContainer />
   </div>
 </template>
 

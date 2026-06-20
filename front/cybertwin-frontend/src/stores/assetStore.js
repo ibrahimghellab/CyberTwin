@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useAppStore } from './appStore'
+import { useToastStore } from './toastStore'
 
 export const useAssetStore = defineStore('assets', () => {
   const assets = ref([])
   const appStore = useAppStore()
+  const toastStore = useToastStore()
   const API_URL = 'http://localhost:3000/assets'
 
   const fetchAssets = async () => {
@@ -17,11 +19,11 @@ export const useAssetStore = defineStore('assets', () => {
     } catch (error) { console.error("Erreur GET Assets:", error) }
   }
 
- const addAsset = async (assetData) => {
+  const addAsset = async (assetData) => {
     // 1. SÉCURITÉ : Vérifier si l'entreprise est bien sélectionnée
     if (!appStore.currentCompanyId) {
-      alert("Erreur : Vous devez d'abord sélectionner une entreprise dans l'Annuaire !");
-      return;
+      toastStore.addToast("Vous devez d'abord sélectionner une entreprise dans l'Annuaire !", 'warning')
+      return
     }
 
     try {
@@ -46,11 +48,11 @@ export const useAssetStore = defineStore('assets', () => {
       
       if (response.ok) {
         await fetchAssets()
+        toastStore.addToast('Actif ajouté avec succès.', 'success')
       } else {
-        // Affiche l'erreur exacte renvoyée par le backend de ton binôme
         const errorData = await response.json()
         console.error("Erreur Backend :", errorData)
-        alert(`Le serveur a refusé l'ajout : ${errorData.error}`)
+        toastStore.addToast(`Le serveur a refusé l'ajout : ${errorData.error || 'Erreur inconnue'}`, 'error')
       }
     } catch (error) {
       console.error("Erreur réseau (POST Assets):", error)
@@ -60,8 +62,16 @@ export const useAssetStore = defineStore('assets', () => {
   const removeAsset = async (id) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
-      if (response.ok) assets.value = assets.value.filter(a => a.id !== id)
-    } catch (error) { console.error(error) }
+      if (response.ok) {
+        assets.value = assets.value.filter(a => a.id !== id)
+        toastStore.addToast('Actif supprimé.', 'success')
+      } else {
+        toastStore.addToast('Impossible de supprimer l\'actif.', 'error')
+      }
+    } catch (error) {
+      console.error(error)
+      toastStore.addToast('Erreur réseau lors de la suppression de l\'actif.', 'error')
+    }
   }
 
   return { assets, fetchAssets, addAsset, removeAsset }
