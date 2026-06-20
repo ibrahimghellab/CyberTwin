@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const companyController = require('./CompanyController');
  
-router.get('/', companyController.getCompany);
+router.get('/', companyController.getCompanies); //
+router.get('/:id', companyController.getCompanyById); 
 router.post('/', companyController.createCompany);
 router.put('/:id', companyController.updateCompany);
  
 module.exports = router;
- 

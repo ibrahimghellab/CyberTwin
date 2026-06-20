@@ -1,4 +1,3 @@
-// controllers/assetController.js
 const { pool } = require('../config/database');
 
 const VALID_TYPES = [
@@ -10,24 +9,29 @@ const VALID_TYPES = [
   'Application métier',
 ];
 
-// GET /assets
-// Liste tous les actifs, avec le nombre de vulnérabilités associées
 exports.getAssets = async (req, res) => {
   try {
-    const [rows] = await pool.query(`
-      SELECT a.*,
-             COUNT(v.id) AS vulnerabilities_count
+    const companyId = req.query.company_id; //
+    let query = `
+      SELECT a.*, COUNT(v.id) AS vulnerabilities_count
       FROM assets a
       LEFT JOIN vulnerabilities v ON v.asset_id = a.id
-      GROUP BY a.id
-      ORDER BY a.created_at DESC
-    `);
+    `;
+    const params = [];
+
+    if (companyId) {
+      query += ` WHERE a.company_id = ?`;
+      params.push(companyId);
+    }
+
+    query += ` GROUP BY a.id ORDER BY a.created_at DESC`;
+    const [rows] = await pool.query(query, params);
     res.json(rows);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erreur serveur lors de la récupération des actifs.' });
+    res.status(500).json({ error: 'Erreur serveur.' });
   }
 };
+// Le reste du contrôleur reste identique
 
 // GET /assets/:id
 exports.getAssetById = async (req, res) => {

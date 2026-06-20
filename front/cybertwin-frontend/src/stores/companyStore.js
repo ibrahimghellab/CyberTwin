@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { api } from '../services/api' // On va créer ce fichier juste après
+import { api } from '../services/api'
 
 export const useCompanyStore = defineStore('company', () => {
   // État (State) : les données de l'entreprise [cite: 28-31]
