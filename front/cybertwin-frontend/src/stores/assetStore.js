@@ -32,13 +32,12 @@ export const useAssetStore = defineStore('assets', () => {
         company_id: appStore.currentCompanyId, 
         name: assetData.name,
         type: assetData.type,
-        // Forcer en booléen strict (le backend fera !!is_internet_facing)
+        // Forcer en booléen strict
         is_internet_facing: assetData.is_internet_facing === true, 
         description: assetData.description || ''
       }
 
-      // 3. LOG DE DÉBOGAGE : Regarde dans ta console (F12) ce qui s'affiche !
-      console.log("Payload envoyé à l'API :", payload);
+      console.log("Payload envoyé à l'API (POST) :", payload);
 
       const response = await fetch(API_URL, {
         method: 'POST',
@@ -59,6 +58,38 @@ export const useAssetStore = defineStore('assets', () => {
     }
   }
 
+  // NOUVELLE FONCTION : Mettre à jour un actif
+  const updateAsset = async (id, assetData) => {
+    try {
+      const payload = {
+        name: assetData.name,
+        type: assetData.type,
+        is_internet_facing: assetData.is_internet_facing === true, 
+        description: assetData.description || ''
+      }
+
+      console.log("Payload envoyé à l'API (PUT) :", payload);
+
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      
+      if (response.ok) {
+        await fetchAssets()
+        toastStore.addToast('Actif modifié avec succès.', 'success')
+      } else {
+        const errorData = await response.json()
+        console.error("Erreur Backend :", errorData)
+        toastStore.addToast(`Le serveur a refusé la modification : ${errorData.error || 'Erreur inconnue'}`, 'error')
+      }
+    } catch (error) {
+      console.error("Erreur réseau (PUT Assets):", error)
+      toastStore.addToast('Erreur de connexion lors de la modification.', 'error')
+    }
+  }
+
   const removeAsset = async (id) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' })
@@ -74,5 +105,6 @@ export const useAssetStore = defineStore('assets', () => {
     }
   }
 
-  return { assets, fetchAssets, addAsset, removeAsset }
+  // N'oublie pas de l'exporter ici pour que le composant Vue puisse l'utiliser !
+  return { assets, fetchAssets, addAsset, updateAsset, removeAsset }
 })
