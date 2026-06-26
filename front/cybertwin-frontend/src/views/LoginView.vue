@@ -42,11 +42,10 @@ const handleLogin = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  width: 100%;
+  box-sizing: border-box;
+  min-height: calc(100vh - 4rem); 
   padding: 2rem;
 }
-
 .login-card {
   width: 100%;
   max-width: 400px;
