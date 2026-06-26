@@ -1,12 +1,3 @@
-// services/riskEngine.js
-//
-// Moteur de calcul du risque cyber.
-// Logique : on calcule un score pondéré basé sur :
-//   - le nombre d'actifs et de vulnérabilités
-//   - la criticité des vulnérabilités
-//   - l'exposition Internet des actifs concernés
-//
-// Le score est normalisé sur une échelle de 0 à 100, puis traduit en niveau.
 
 const CRITICALITY_WEIGHTS = {
   faible: 1,
@@ -15,7 +6,7 @@ const CRITICALITY_WEIGHTS = {
   critique: 7,
 };
 
-const INTERNET_EXPOSURE_MULTIPLIER = 1.5; // une vulnérabilité sur un actif exposé pèse plus lourd
+const INTERNET_EXPOSURE_MULTIPLIER = 1.5;
 
 /**
  * Calcule le score de risque brut à partir d'une liste d'actifs et de vulnérabilités.
@@ -42,9 +33,8 @@ function calculateRisk(assets, vulnerabilities) {
     rawScore += weight * exposureMultiplier;
   }
 
-  // Normalisation : on plafonne à 100, avec une courbe qui sature progressivement
-  // pour éviter qu'une seule vulnérabilité critique ne fasse exploser le score.
-  const maxExpectedScore = Math.max(assets.length * 5, 10); // plafond dynamique selon la taille du parc
+ 
+  const maxExpectedScore = Math.max(assets.length * 5, 10);
   const normalizedScore = Math.min(100, Math.round((rawScore / maxExpectedScore) * 100));
 
   let level;
