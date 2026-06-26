@@ -44,7 +44,7 @@ watch(() => appStore.currentCompanyId, () => {
   <div class="container">
     <div class="header-actions no-print">
       <h1>Générateur de Rapport</h1>
-      <button v-if="reportData" class="btn-print" onclick="window.print()">
+      <button v-if="reportData" class="btn-print no-print" onclick="window.print()">
         🖨️ Exporter en PDF / Imprimer
       </button>
     </div>

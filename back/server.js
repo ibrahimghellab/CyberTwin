@@ -9,6 +9,7 @@ const vulnerabilityRoutes = require('./vulnerability/Vulnerabilityroutes');
 const riskRoutes = require('./risks/RiskRoutes');
 const dashboardRoutes = require('./Dashboard/dashboardRoutes');
 const reportRoutes = require('./report/reportRoutes');
+const authRoutes = require('./auth/authRoutes')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use('/vulnerabilities', vulnerabilityRoutes);
 app.use('/risk', riskRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/report', reportRoutes);
+app.use('/auth', authRoutes);
 
 app.use((req, res) => res.status(404).json({ error: 'Route non trouvée.' }));
 

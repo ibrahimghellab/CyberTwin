@@ -2,9 +2,11 @@
 import { onMounted, ref } from 'vue'
 import { useAssetStore } from '../stores/assetStore'
 import { useVulnerabilityStore } from '../stores/vulnerabilityStore'
+import { useAuthStore } from '../stores/authStore'
 
 const assetStore = useAssetStore()
 const vulnStore = useVulnerabilityStore()
+const authStore = useAuthStore()
 const isCreating = ref(false)
 const editingId = ref(null)
 
@@ -29,14 +31,19 @@ const handleSubmit = async () => {
 
 const editVuln = (vuln) => {
   editingId.value = vuln.id
-  // Pré-remplissage du formulaire (attention aux noms des clés selon ton backend, ex: name vs title)
   newVuln.value = { 
-    assetId: vuln.asset_id, 
+    assetId: Number(vuln.asset_id), 
     name: vuln.title || vuln.name, 
     description: vuln.description, 
     criticality: vuln.criticality 
   }
   isCreating.value = true
+}
+
+// INTERCEPTION DE LA SUPPRESSION/RÉSOLUTION AVEC POP-UP
+const deleteVulnerability = async (id) => {
+  if (!confirm("Confirmez-vous que cette vulnérabilité est résolue ? Elle sera définitivement retirée du registre.")) return
+  await vulnStore.removeVulnerability(id)
 }
 
 const cancelEdit = () => {
@@ -55,7 +62,7 @@ onMounted(() => {
   <div class="container">
     <div class="header-actions">
       <h1>Registre des Vulnérabilités</h1>
-      <button @click="cancelEdit(); isCreating = !isCreating" class="btn-primary danger">
+      <button v-if="authStore.user?.role === 'admin'" @click="cancelEdit(); isCreating = !isCreating" class="btn-primary danger">
         {{ isCreating ? 'Fermer' : '+ Déclarer une faille' }}
       </button>
     </div>
@@ -104,9 +111,9 @@ onMounted(() => {
         <div v-for="vuln in vulnStore.vulnerabilities" :key="vuln.id" class="item-card">
           <div :class="['card-header', vuln.criticality]">
             <span class="criticality-badge">{{ vuln.criticality }}</span>
-            <div style="display: flex; gap: 0.5rem;">
+            <div v-if="authStore.user?.role === 'admin'" style="display: flex; gap: 0.5rem;">
               <button @click="editVuln(vuln)" class="btn-delete-white" title="Modifier">✏️</button>
-              <button @click="vulnStore.removeVulnerability(vuln.id)" class="btn-delete-white" title="Résoudre">✓</button>
+              <button @click="deleteVulnerability(vuln.id)" class="btn-delete-white" title="Résoudre">✓</button>
             </div>
           </div>
           
@@ -122,11 +129,8 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Ajout du bouton secondaire */
 .btn-secondary { background: var(--surface-alt); color: var(--text-color); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
 .btn-secondary:hover { background: var(--border-color); }
-
-/* ... Conserve le reste de ton CSS intact ... */
 .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
 .btn-primary { padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; color: white; }
 .btn-primary.danger { background: #d32f2f; }

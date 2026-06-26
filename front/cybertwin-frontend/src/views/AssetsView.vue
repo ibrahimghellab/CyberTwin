@@ -1,10 +1,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useAssetStore } from '../stores/assetStore'
+import { useAuthStore } from '../stores/authStore'
 
 const assetStore = useAssetStore()
+const authStore = useAuthStore()
 const isCreating = ref(false)
-const editingId = ref(null) // Permet de savoir si on est en mode édition
+const editingId = ref(null)
 
 const assetTypes = ['Serveur Web', 'Base de données', 'Poste utilisateur', 'Routeur', 'Pare-feu', 'Application métier']
 
@@ -23,29 +25,30 @@ const getIcon = (type) => {
   return icons[type] || '📦'
 }
 
-// Fonction unifiée pour Ajouter ou Modifier
 const handleSubmit = async () => {
   if (!newAsset.value.name) return
   
   if (editingId.value) {
-    // Mode Modification
     await assetStore.updateAsset(editingId.value, { ...newAsset.value })
   } else {
-    // Mode Création
     await assetStore.addAsset({ ...newAsset.value })
   }
   
   cancelEdit()
 }
 
-// Ouvre le formulaire en mode édition
 const editAsset = (asset) => {
   editingId.value = asset.id
-  newAsset.value = { ...asset } // Copie les données de l'actif dans le formulaire
+  newAsset.value = { ...asset }
   isCreating.value = true
 }
 
-// Annule l'édition et vide le formulaire
+// INTERCEPTION DE LA SUPPRESSION AVEC POP-UP
+const deleteAsset = async (id) => {
+  if (!confirm("Voulez-vous vraiment supprimer cet actif ? Toutes les vulnérabilités associées à cet équipement seront définitivement perdues.")) return
+  await assetStore.removeAsset(id)
+}
+
 const cancelEdit = () => {
   isCreating.value = false
   editingId.value = null
@@ -61,7 +64,7 @@ onMounted(() => {
   <div class="container">
     <div class="header-actions">
       <h1>Inventaire du Parc</h1>
-      <button @click="cancelEdit(); isCreating = !isCreating" class="btn-primary">
+      <button v-if="authStore.user?.role === 'admin'" @click="cancelEdit(); isCreating = !isCreating" class="btn-primary">
         {{ isCreating ? 'Fermer le formulaire' : '+ Nouvel Actif' }}
       </button>
     </div>
@@ -103,9 +106,9 @@ onMounted(() => {
     <div v-else class="card-grid">
       <div v-for="asset in assetStore.assets" :key="asset.id" class="item-card">
         
-        <div class="card-actions">
+        <div v-if="authStore.user?.role === 'admin'" class="card-actions">
           <button @click="editAsset(asset)" class="btn-action edit" title="Modifier">✏️</button>
-          <button @click="assetStore.removeAsset(asset.id)" class="btn-action delete" title="Supprimer">×</button>
+          <button @click="deleteAsset(asset.id)" class="btn-action delete" title="Supprimer">×</button>
         </div>
         
         <div class="card-icon">{{ getIcon(asset.type) }}</div>
@@ -124,19 +127,16 @@ onMounted(() => {
 </template>
 
 <style scoped>
-/* Ajoute juste ces classes à ton CSS existant dans AssetsView.vue */
 .card-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 0.5rem; }
-.btn-action { background: var(--surface-alt); border: 1px solid var(--border-color); border-radius: 6px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 1.1rem; }
+.btn-action { background: var(--surface-alt); border: 1px solid var(--border-color); border-radius: 6px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 1.1rem; color: var(--text-color); }
 .btn-action.edit:hover { background: var(--primary-color); color: white; border-color: var(--primary-color); }
 .btn-action.delete { font-size: 1.4rem; color: var(--text-muted); }
 .btn-action.delete:hover { background: var(--danger-color); color: white; border-color: var(--danger-color); }
 .btn-secondary { background: var(--surface-alt); color: var(--text-color); border: 1px solid var(--border-color); padding: 0.8rem; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
 .btn-secondary:hover { background: var(--border-color); }
-
-/* ... Conserve le reste de ton CSS intact ... */
 .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-.btn-primary { background: #2c3e50; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-.btn-primary:hover { background: #1a252f; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.btn-primary { background: var(--primary-color); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .glass-panel { background: var(--surface); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 15px var(--shadow-color-soft); border: 1px solid var(--border-color); }
 label { font-weight: bold; font-size: 0.9rem; color: var(--text-muted); }
 input, select, textarea { margin-top: 0.3rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; background: var(--surface); color: var(--text-color); }
